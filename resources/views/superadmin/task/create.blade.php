@@ -134,8 +134,8 @@
         <div class="card">
 
             <!-- Project Name -->
-            <h1>Create Task for Project:</h1>
-            <h2>{{ $project->title }}</h2>
+            <h1>Create Task for Project: {{ $project->title }}</h1>
+            <!--<h2>{{ $project->title }}</h2>-->
 
             @if(session('success'))
                 <div class="success">{{ session('success') }}</div>

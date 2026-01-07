@@ -123,15 +123,18 @@
         <div class="card">
             <h2>Task Details</h2>
 
-            <div class="row">
-                <div class="label">Task Title</div>
-                <div class="value">{{ $task->title }}</div>
-            </div>
 
             <div class="row">
                 <div class="label">Project</div>
                 <div class="value">{{ $task->project->title ?? '-' }}</div>
             </div>
+            
+            <div class="row">
+                <div class="label">Task Title</div>
+                <div class="value">{{ $task->title }}</div>
+            </div>
+
+            
 
             <div class="row">
                 <div class="label">Assigned Staff</div>
