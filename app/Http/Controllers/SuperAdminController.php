@@ -206,7 +206,7 @@ public function stafftaskview($id)
     return view('superadmin.task.viewtask', compact('task'));
 }
 
-public function trackstafftask($id)
+public function tracktask($id)
 {
     $task = Task::with([
         'project.manager',      // Project and its manager

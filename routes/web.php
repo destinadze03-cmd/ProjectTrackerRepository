@@ -116,18 +116,18 @@ Route::get('/superadmin/tasks/{id}', [SuperAdminController::class, 'stafftaskvie
     ->name('superadmin.task.viewtask');
 
 // Track task progress
-Route::get('/superadmin/tasks/{id}/track', [SuperAdminController::class, 'trackstafftask'])
+Route::get('/superadmin/tasks/{id}/track', [SuperAdminController::class, 'tracktask'])
     ->name('superadmin.task.tracktask');
 
-        Route::get('/superadmin/tasks/validated', [SuperAdminController::class, 'validatedTasks'])->name('superadmin.task.validatedtasks');
+        Route::get('/tasks/validated', [SuperAdminController::class, 'validatedTasks'])->name('superadmin.task.validatedtasks');
 
-Route::get('/superadmin/tasks/complete', [SuperAdminController::class, 'completeTasks'])
+Route::get('/tasks/complete', [SuperAdminController::class, 'completeTasks'])
     ->name('superadmin.task.completedtask');
 
-Route::get('/superadmin/tasks/pending', [SuperAdminController::class, 'pendingTasks'])
+Route::get('/tasks/pending', [SuperAdminController::class, 'pendingTasks'])
     ->name('superadmin.task.pendingtask');
 
-Route::get('/superadmin/tasks/submitted', [SuperAdminController::class, 'submittedTasks'])
+Route::get('/tasks/submitted', [SuperAdminController::class, 'submittedTasks'])
     ->name('superadmin.task.submittedtask');
 
 

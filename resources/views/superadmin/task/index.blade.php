@@ -249,8 +249,8 @@
     <td>{{ ucfirst($task->status) }}</td>
     <td>{{ ucfirst($task->review_status) }}</td>
     <td>{{ $task->progress ?? 50 }}%</td>
-     <td><a href="#" class="btn btn-view">View</a></td>
-                            <td><a href="#" class="btn btn-track">Track</a></td>
+     <td><a href="{{ route('superadmin.task.viewtask', $task->id) }}" class="btn btn-view">View</a></td>
+    <td><a href="{{ route('superadmin.task.tracktask', $task->id) }}" class="btn btn-track">Track</a></td>
 </tr>
 @empty
 <tr>
