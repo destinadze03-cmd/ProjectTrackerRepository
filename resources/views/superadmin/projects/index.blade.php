@@ -158,6 +158,7 @@
             }
         }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
@@ -170,7 +171,12 @@
           
             <li><a href="{{ route('superadmin.projects.index') }}">Projects</a></li>
             <li><a href="#">Tasks</a></li>
-            <li><a href="#">Settings</a></li>
+            <li><button
+    id="themeToggle"
+    class="px-3 py-2 rounded border"
+>
+    🌙 Dark Mode
+</button></li>
 
             <li><form action="{{ route('logout') }}" method="POST" style="padding:2px;">
             @csrf

@@ -154,6 +154,7 @@
             }
         }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
@@ -162,13 +163,15 @@
     <!-- SIDEBAR -->
     <aside class="sidebar">
         <h2>SuperAdmin</h2>
-        <a href="#">Dashboard</a>
-        <a href="#">Projects</a>
-        <a href="#" class="active">Tasks</a>
-        <a href="#">Admins</a>
-        <a href="#">Staff</a>
-        <a href="#">Reports</a>
-        <a href="#">Settings</a>
+        <a href="{{ route('superadmin.dashboard') }}">Dashboard</a>
+        <a href="{{ route('superadmin.projects.index') }}">Projects</a>
+        <a href="{{ route('superadmin.task.index') }}" >Tasks</a>
+       
+        <a href="#"><button id="themeToggle" class="px-3 py-2 rounded border"> 🌙 Dark Mode</button></a>
+        <form action="{{ route('logout') }}" method="POST" style="padding:2px;">
+            @csrf
+            <button class="btn btn-delete">Logout</button>
+        </form>
     </aside>
 
     <!-- MAIN CONTENT -->

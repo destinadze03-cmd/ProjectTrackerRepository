@@ -63,6 +63,7 @@
             table{min-width:100%}
         }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
@@ -77,6 +78,16 @@
         <a href="{{ route('superadmin.admins.index') }}">Admins</a>
         <a href="{{ route('superadmin.staff.staffpage') }}">Staff</a>
         <a href="#">Reports</a>
+        <a href="#"><button
+    id="themeToggle"
+    class="px-3 py-2 rounded border"
+>
+    🌙 Dark Mode
+</button></a>
+<li><form action="{{ route('logout') }}" method="POST" style="padding:2px;">
+            @csrf
+            <button class="btn btn-delete">Logout</button>
+        </form></li>
     </aside>
 
     <!-- MAIN -->

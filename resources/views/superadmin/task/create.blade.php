@@ -115,6 +115,7 @@
             margin-bottom: 15px;
         }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 

@@ -90,6 +90,7 @@
             color: #777;
         }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
     <div class="container">

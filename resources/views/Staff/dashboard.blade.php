@@ -6,6 +6,7 @@
     <title>Staff Dashboard</title>
 
     @include('staff.staffcss')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>

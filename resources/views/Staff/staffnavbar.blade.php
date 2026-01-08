@@ -7,6 +7,13 @@
 
         <a href="#">My Progress</a>
         <a href="#">Profile</a>
+        <li><button
+    id="themeToggle"
+    class="px-3 py-2 rounded border"
+>
+    🌙 Dark Mode
+</button>
+</li>
         <form action="{{ route('logout') }}" method="POST">
     @csrf
     <button class="btn btn-danger">Logout</button>

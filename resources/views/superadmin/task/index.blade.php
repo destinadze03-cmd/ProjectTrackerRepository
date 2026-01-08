@@ -189,6 +189,7 @@
             table { min-width: 400px; font-size: 12px; }
         }
     </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 
