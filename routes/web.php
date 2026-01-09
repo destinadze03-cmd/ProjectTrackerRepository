@@ -240,4 +240,20 @@ Route::middleware(['auth', 'isStaff'])->group(function () {
     // Submit progress / screenshot / mark done
     Route::post('/staff/tasks/{task}/update', [StaffTaskController::class, 'updateTask'])
         ->name('staff.tasks.update');
+
+
+
+
+
+
+
+
+
+
+
+Route::get('/staff/tasks', [StaffTaskController::class, 'index'])
+    ->name('staff.tasks.index');
+
+
+        
 });

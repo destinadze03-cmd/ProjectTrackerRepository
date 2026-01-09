@@ -162,6 +162,7 @@
         <a href="{{ route('superadmin.task.index') }}">Tasks</a>
         <a href="{{ route('superadmin.admins.adminpage') }}" class="active">Admins</a>
         <a href="{{ route('superadmin.staff.staffpage') }}">Staff</a>
+        
         <a href="#">Reports</a>
     </aside>
 

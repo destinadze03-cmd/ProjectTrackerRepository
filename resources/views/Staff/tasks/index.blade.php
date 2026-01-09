@@ -34,8 +34,6 @@
 
         <a href="{{ url('staff/dashboard') }}">Dashboard</a>
         <a href="{{ url('staff/tasks') }}">My Tasks</a>
-        <a href="{{ url('staff/progress') }}">My Progress</a>
-        <a href="{{ url('staff/profile') }}">Profile</a>
         <form action="{{ route('logout') }}" method="POST">
             @csrf
             <button class="btn btn-danger">Logout</button>
