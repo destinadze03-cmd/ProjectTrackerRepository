@@ -63,11 +63,17 @@
             margin-bottom: 20px;
         }
 
+        /* ✅ GRID LAYOUT (THIS FIXES EVERYTHING) */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
         .card {
             background: #fff;
             padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            border-radius: 12px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
 
@@ -136,71 +142,51 @@
 </head>
 <body>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h2>Super Admin</h2>
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>Super Admin</h2>
 
-        <ul>
-            <li><a href="{{ route('superadmin.dashboard') }}" style="text-decoration: none; color: inherit;">
-        Dashboard
-    </a></li>
-             <li>
-    <a href="{{ route('superadmin.admins.index') }}" style="text-decoration: none; color: inherit;">
-        Manage Admins
-    </a>
-</li>
-            
-    <li><a href="{{ route('superadmin.projects.index') }}" style="text-decoration: none; color: inherit;">Projects </a></li>
-     <li><a href="{{ route('superadmin.task.index') }}" style="text-decoration: none; color: inherit;">Task</a></li>
+    <ul>
+        <li><a href="{{ route('superadmin.dashboard') }}" style="text-decoration:none;color:inherit;">Dashboard</a></li>
+        <li><a href="{{ route('superadmin.admins.index') }}" style="text-decoration:none;color:inherit;">Manage Admins</a></li>
+        <li><a href="{{ route('superadmin.projects.index') }}" style="text-decoration:none;color:inherit;">Projects</a></li>
+        <li><a href="{{ route('superadmin.task.index') }}" style="text-decoration:none;color:inherit;">Task</a></li>
+        <li>Settings</li>
+        <li>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button class="btn">Logout</button>
+            </form>
+        </li>
+    </ul>
+</div>
 
-            <li>Settings</li>
-            <li><form action="{{ route('logout') }}" method="POST" style="padding:2px;">
-            @csrf
-            <button class="btn btn-delete">Logout</button>
-        </form></li>
-        </ul>
-    </div>
+<!-- MAIN CONTENT -->
+<div class="main-conten">
 
-    <!-- MAIN CONTENT -->
-    <div class="main-conten">
+    <h2>Manage Admins</h2>
 
-        <h2>Manage Admins</h2>
+    <!-- GRID START -->
+    <div class="card-grid">
 
-        <!-- SUCCESS MESSAGE -->
-        @if(session('success'))
-            <div style="background: #c8e6c9; padding: 10px; border-radius: 6px; margin-bottom:10px;">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <!-- ERROR MESSAGE -->
-        @if(session('error'))
-            <div style="background: #ffcdd2; padding: 10px; border-radius: 6px; margin-bottom:10px;">
-                {{ session('error') }}
-            </div>
-        @endif
-
-
-        <!-- CREATE NEW ADMIN -->
+        <!-- CREATE ADMIN -->
         <div class="card">
             <h3>Create New Admin</h3>
 
             <form action="{{ route('superadmin.admins.create') }}" method="POST">
                 @csrf
+                <label>Name</label>
+                <input type="text" name="name" class="input" required>
 
-                <label>Name:</label>
-                <input type="text" name="name" required class="input">
+                <label>Email</label>
+                <input type="email" name="email" class="input" required>
 
-                <label>Email:</label>
-                <input type="email" name="email" required class="input">
-
-                <label>Password:</label>
-                <input type="password" name="password" required class="input">
+                <label>Password</label>
+                <input type="password" name="password" class="input" required>
 
                 <button class="btn">Create Admin</button>
             </form>
         </div>
-
 
         <!-- CURRENT ADMINS -->
         <div class="card">
@@ -211,7 +197,6 @@
                     <th>Name</th>
                     <th>Email</th>
                 </tr>
-
                 @foreach($admins as $admin)
                 <tr>
                     <td>{{ $admin->name }}</td>
@@ -221,8 +206,7 @@
             </table>
         </div>
 
-
-        <!-- CONVERT STAFF TO ADMIN -->
+        <!-- CONVERT STAFF -->
         <div class="card">
             <h3>Convert Staff to Admin</h3>
 
@@ -232,7 +216,6 @@
                     <th>Email</th>
                     <th>Action</th>
                 </tr>
-
                 @foreach($staff as $s)
                 <tr>
                     <td>{{ $s->name }}</td>
@@ -240,7 +223,7 @@
                     <td>
                         <form action="{{ route('superadmin.admins.convert', $s->id) }}" method="POST">
                             @csrf
-                            <button class="btn">Convert to Admin</button>
+                            <button class="btn">Convert</button>
                         </form>
                     </td>
                 </tr>
@@ -249,6 +232,10 @@
         </div>
 
     </div>
+    <!-- GRID END -->
+
+</div>
 
 </body>
 </html>
+
