@@ -16,7 +16,7 @@ use App\Http\Controllers\SuperAdminProjectController;
 use App\Http\Controllers\SuperAdmin\ProjectController as SAProjectController;
 use App\Http\Controllers\SuperAdminStaffController;
 use App\Http\Controllers\SuperAdmin\SuperAdminTaskController;
-
+use App\Http\Controllers\Admin\AdminProjectController;
 
 
 
@@ -215,6 +215,89 @@ Route::post('/admin/tasks/{task}/reject', [AdminTaskController::class, 'reject']
     Route::post('/admin/tasks', [AdminTaskController::class, 'store'])->name('admin.tasks.store');
 
     
+
+Route::get('/tasks/create', [AdminTaskController::class, 'create'])
+        ->name('Admin.tasks.create');
+
+  // Show the create task form
+    Route::get('/tasks/create', [AdminTaskController::class, 'create'])->name('tasks.create');
+
+    // Store the task
+    Route::post('/tasks', [AdminTaskController::class, 'store'])->name('tasks.store');
+ // Projects
+    Route::get('/projects', [AdminProjectController::class, 'index'])->name('projects.index');
+    Route::get('/projects/{project}', [AdminProjectController::class, 'show'])->name('projects.show');
+
+
+
+
+
+    Route::get('/admin/my-projects', [App\Http\Controllers\Admin\AdminProjectController::class, 'myProjects'])
+        ->name('admin.my-projects');
+
+    //Route::get('/admin/create-tasks', [App\Http\Controllers\Admin\AdminTaskController::class, 'createTasks'])
+        //->name('admin.create-tasks');
+
+
+        // List admin projects
+    Route::get('/admin/projects', [AdminProjectController::class, 'index'])
+        ->name('admin.projects.index');
+
+    // View tasks under a specific project
+    Route::get('/admin/projects/{project}/tasks', [AdminTaskController::class, 'projectTasks'])
+        ->name('admin.projects.project-tasks'); 
+
+    Route::get('/admin/projects/{project}', [AdminProjectController::class, 'show'])
+    ->name('admin.projects.show');
+
+Route::post('/admin/tasks', [AdminTaskController::class, 'store'])
+    ->name('admin.projects.store');
+    
+
+
+
+
+
+
+    // web.php
+
+Route::get('/admin/tasks/{task}/detail', [AdminTaskController::class, 'show'])
+    ->name('admin.tasks.show-task-detail');
+
+
+
+   Route::get(
+    '/admin/projects/{project}/total-tasks',
+    [AdminProjectController::class, 'totalTasks']
+)->name('admin.projects.project-total-task');
+
+Route::get(
+    '/admin/projects/{project}/tasks',
+    [AdminTaskController::class, 'projectTasks']
+)->name('admin.projects.project-tasks');
+
+
+
+Route::get(
+    '/admin/projects/{project}/taskss',
+    [AdminTaskController::class, 'completedtask']
+)->name('admin.Tasks.completed');
+
+Route::get(
+    '/admin/projects/{project}/tasksss',
+    [AdminTaskController::class, 'pendingtask']
+)->name('admin.Tasks.pending');
+
+
+
+
+
+
+
+
+
+
+
 });
 
 /*

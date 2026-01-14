@@ -233,6 +233,14 @@
     }
 }
 
+
+
+
+
+
+
+
+
     </style>
 
     <script>
@@ -240,6 +248,7 @@
             document.querySelector(".sidebar").classList.toggle("active");
         }
     </script>
+    
 </head>
 <body>
 
@@ -249,9 +258,9 @@
     <div class="sidebar">
         <h2>Admin</h2>
 
-        <a href="">Home</a>
-        <a href="">Preject assignt</a>
-       
+        <a href="{{ route('admin.dashboard') }}">Home</a>
+        <a href="{{ route('admin.my-projects') }}">Preject assignt</a>
+        
 
 
         <form action="{{ route('logout') }}" method="POST" style="padding:20px;">

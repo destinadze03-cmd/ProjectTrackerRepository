@@ -64,7 +64,7 @@
                 <td>{{ ucfirst($task->status) }}</td>
 
                 <td>
-                    <a href="{{ route('tasks.show', $task->id) }}" class="btn btn-edit">View</a>
+                    <a href="" class="btn btn-edit">View</a>
                 </td>
             </tr>
             @endforeach
