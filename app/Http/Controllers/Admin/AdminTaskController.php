@@ -124,21 +124,28 @@ class AdminTaskController extends Controller
         ->get();
 
 
+
+
+
+
       
     // Staff list
     $staffs = User::where('role', 'staff')->get();
+
+    // Fetch all admin users
+    $admins = User::where('role', 'admin')->get();
 // Total count of tasks
     $totalTaskCount = $project->tasks()->count();
 
     return view(
         'admin.projects.project-tasks',
-        compact('project', 'tasks', 'staffs','totalTaskCount')
+        compact('project', 'tasks', 'staffs','admins','totalTaskCount')
     );
 }
 
     
 
-    public function store(Request $request)
+    public function storeee(Request $request)
 {
     $request->validate([
         'project_id' => 'required|exists:projects,id',
@@ -156,6 +163,28 @@ class AdminTaskController extends Controller
     return back()->with('success', 'Task created successfully.');
 }
 
+public function store(Request $request)
+{
+    // Validate input
+    $data = $request->validate([
+        'project_id' => 'required|exists:projects,id',
+        'title' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'assigned_to' => 'required|exists:users,id',
+        'supervised_by' => 'nullable|exists:users,id',
+        'start_date' => 'nullable|date',
+        'end_date' => 'nullable|date',
+        'duration' => 'nullable|integer',
+    ]);
+
+    // Save task
+    $task = Task::create($data);
+
+   return redirect()
+    ->route('admin.projects.project-tasks', $data['project_id'])
+    ->with('success', 'Task created successfully!');
+
+}
 
 
 public function index(Request $request, Project $project)
@@ -216,6 +245,74 @@ public function pendingtask(Project $project)
 
     return view('admin.Tasks.completed', compact('project', 'tasks'));
 }
+
+
+
+
+
+
+
+
+
+
+/* app/Http/Controllers/Admin/TaskController.php
+
+public function edite(Task $task)
+{
+    return view('admin.projects.project-tasks', [
+        'project' => $task->project,
+        'tasks' => $task->project->tasks()->latest()->take(10)->get(),
+        'totalTaskCount' => $task->project->tasks()->count(),
+        'staffs' => User::where('role', 'staff')->get(),
+        'editTask' => $task, // 👈 IMPORTANT
+    ]);
+}*/
+
+public function update(Request $request, Task $task)
+{
+    $task->update($request->all());
+
+    return redirect()
+        ->route('admin.projects.tasks.edit', $task->id)
+        ->with('success', 'Task updated successfully');
+}
+
+
+
+
+
+
+public function edit($id)
+{
+    $editTask = Task::findOrFail($id);
+
+    // Get the project
+    $project = $editTask->project;
+
+    // Get all tasks for this project
+    $tasks = $project->tasks()->latest()->get();
+
+    // Count total tasks
+    $totalTaskCount = $project->tasks()->count();
+
+    // Staff & admin lists
+    $staffs = User::where('role', 'staff')->get();
+    $admins = User::where('role', 'admin')->get();
+
+    return view(
+        'Admin.projects.project-tasks',
+        compact(
+            'project',
+            'tasks',
+            'staffs',
+            'admins',
+            'editTask',
+            'totalTaskCount'
+        )
+    );
+}
+
+
 
 }
 

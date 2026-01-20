@@ -72,12 +72,13 @@
             </div>
         </a>
 
-        <a href="" class="card-link">
-            <div class="square-card">
-                <h3>Staff Task Update</h3>
-                <p>Finished Task</p>
-            </div>
-        </a>
+        <a href="{{ route('admin.staff.update') }}" class="card-link">
+    <div class="square-card">
+        <h3>Staff Task Update</h3>
+        <p>Finished Task</p>
+    </div>
+</a>
+
 
         <a href="" class="card-link">
             <div class="square-card">

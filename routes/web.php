@@ -8,7 +8,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\StaffTaskController;
-use App\Http\Controllers\AdminStaffController;
+use App\Http\Controllers\Admin\AdminStaffController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SuperAdminController;
@@ -251,7 +251,7 @@ Route::get('/tasks/create', [AdminTaskController::class, 'create'])
     ->name('admin.projects.show');
 
 Route::post('/admin/tasks', [AdminTaskController::class, 'store'])
-    ->name('admin.projects.store');
+    ->name('admin.tasks.store');
     
 
 
@@ -292,13 +292,46 @@ Route::get(
 
 
 
+// routes/web.php
+Route::get('/admin/tasks/{task}/edit', [AdminTaskController::class, 'edit'])->name('admin.tasks.edit');
+Route::put('/admin/tasks/{task}', [AdminTaskController::class, 'update'])->name('admin.tasks.update');
 
 
 
 
 
+Route::get('/admin/staff.updates', [AdminStaffController::class, 'staffupdate'])
+        ->name('admin.staff.update');
 
+  // Review action (approve/reject)
+    Route::post('/admin/tasks/{task}/review', [AdminStaffController::class, 'review'])
+        ->name('admin.staff.review');
+
+// Show a single task submitted by a staff
+Route::get('/admin/staff/tasks/{task}', [AdminStaffController::class, 'taskDetail'])
+    ->name('admin.staff.task-detail');
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------

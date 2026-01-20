@@ -39,8 +39,7 @@
 
         <a href="{{ route('admin.dashboard') }}">Dashboard</a>
         <a href="{{ route('projects.index') }}">All Projects</a>
-        <a href="{{ route('projects.show', $project->id) }}">Back to Project</a>
-    </div>
+     
 
     <div class="main-content">
         
