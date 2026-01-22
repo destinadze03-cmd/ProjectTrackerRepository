@@ -122,14 +122,33 @@
                             @php
                                 $status = strtolower($project->status ?? 'pending');
                             @endphp
-                            <span class="status-badge status-{{ $status }}">
-                                {{ ucfirst($status) }}
-                            </span>
+                           <span class="status-badge status-{{ $project->status }}">
+    {{ ucfirst($project->status) }}
+</span>
+
+
                          
                         </td>
                         <td>{{ $project->created_at->format('d M Y') }}</td>
                         <td><a href="{{ route('admin.projects.show', $project->id) }}"><button> Project details</button></a></td>
-                        <td><a href=""><button> Submit Project</button></a></td>
+                        <td>
+    @if(in_array($project->status, ['pending', 'rejected']))
+        <form action="{{ route('admin.projects.submit', $project->id) }}" method="POST">
+            @csrf
+            <button type="submit"
+                style="background:#4f46e5;color:#fff;border:none;padding:8px 12px;border-radius:6px;">
+                Submit Project
+            </button>
+        </form>
+    @else
+        <button
+            disabled
+            style="background:#ccc;color:#666;border:none;padding:8px 12px;border-radius:6px;cursor:not-allowed;">
+            Submitted
+        </button>
+    @endif
+</td>
+
                     </tr>
                 @endforeach
             </tbody>

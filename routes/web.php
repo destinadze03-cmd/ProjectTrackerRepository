@@ -172,6 +172,53 @@ Route::get('/superadmin/task/{id}', [SuperAdminTaskController::class, 'show'])->
 Route::post('/projects/{project}/tasks/store', [SuperAdminTaskController::class, 'store'])
     ->name('superadmin.tasks.store');
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// SuperAdmin actions
+Route::get('/superadmin/projects/submitted', [SuperAdminProjectController::class, 'submitted'])
+    ->name('superadmin.projects.submitted');
+
+Route::post('/superadmin/projects/{project}/approve', [SuperAdminProjectController::class, 'approve'])
+    ->name('superadmin.projects.approve');
+
+Route::post('/superadmin/projects/{project}/reject', [SuperAdminProjectController::class, 'reject'])
+    ->name('superadmin.projects.reject');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 });
 
 /*
@@ -320,10 +367,16 @@ Route::get('/admin/staff/tasks/{task}', [AdminStaffController::class, 'taskDetai
 
 
 
+Route::post(
+    '/admin/projects/{project}/submit',
+    [AdminProjectController::class, 'submit']
+)->name('admin.projects.submit');
 
 
 
-
+// Admin actions
+Route::post('/admin/projects/{project}/submit', [AdminProjectController::class, 'submit'])
+    ->name('admin.projects.submit');
 
 
 

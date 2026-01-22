@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('client_id')->nullable(); // Optional client reference
             $table->unsignedBigInteger('created_by'); // Admin who created the project
 
-            $table->enum('status', ['pending', 'active', 'completed'])->default('pending'); 
+            $table->string('status')->default('pending'); 
             $table->string('client_name')->nullable(); 
             $table->timestamps();
 

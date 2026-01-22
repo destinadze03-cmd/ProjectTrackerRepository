@@ -135,5 +135,33 @@
             .main-content {
                 margin-left: 0;
             }
+
+
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        .status-pending { background:#fff3cd; color:#856404; }
+.status-submitted { background:#cce5ff; color:#004085; }
+.status-approved { background:#d4edda; color:#155724; }
+.status-rejected { background:#f8d7da; color:#721c24; }
+
     </style>

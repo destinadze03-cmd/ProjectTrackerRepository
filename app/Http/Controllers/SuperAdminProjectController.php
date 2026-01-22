@@ -167,4 +167,61 @@ class SuperAdminProjectController extends Controller
     return view('superadmin.dashboard');
 }
 
+
+
+
+
+
+
+
+
+
+
+public function approve(Project $project)
+{
+    $project->update([
+        'status' => 'approved',
+        'reviewed_by' => auth()->id(),
+        'reviewed_at' => now(),
+        'review_note' => request('review_note')
+    ]);
+
+    return back()->with('success', 'Project approved.');
+}
+
+
+
+public function submitted()
+{
+    $projects = Project::with('tasks', 'manager')
+        ->where('status', 'submitted')
+        ->latest()
+        ->get();
+
+    return view('superadmin.projects.submitted', compact('projects'));
+}
+
+public function reject(Project $project)
+{
+    request()->validate([
+        'review_note' => 'required'
+    ]);
+
+    $project->update([
+        'status' => 'rejected',
+        'reviewed_by' => auth()->id(),
+        'reviewed_at' => now(),
+        'review_note' => request('review_note')
+    ]);
+
+    return back()->with('error', 'Project rejected.');
+}
+
+
+
+
+
+
+
+
 }

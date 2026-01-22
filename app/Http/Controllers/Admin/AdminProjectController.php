@@ -48,5 +48,27 @@ public function totalTasks(Project $project)
     return view('admin.projects.project-total-task', compact('project', 'tasks'));
 }
 
+
+
+public function submit(Project $project)
+{
+    // Ensure only assigned admin can submit
+    if ($project->manager_id !== auth()->id()) {
+        abort(403);
+    }
+
+    // Allow submission only if pending or rejected
+    if (!in_array($project->status, ['pending', 'rejected'])) {
+        return back()->with('error', 'This project cannot be submitted.');
+    }
+
+    $project->update([
+        'status' => 'submitted'
+    ]);
+
+    return back()->with('success', 'Project submitted to SuperAdmin for review.');
+}
+
+
 }
 
