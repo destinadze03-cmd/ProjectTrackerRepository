@@ -17,7 +17,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 250px;
             background: #1A237E;
@@ -28,9 +27,7 @@
         }
 
         .sidebar h2 {
-            margin-top: 0;
             text-align: center;
-            font-size: 22px;
             margin-bottom: 20px;
         }
 
@@ -41,18 +38,16 @@
             text-decoration: none;
             margin-bottom: 10px;
             border-radius: 5px;
-            transition: 0.3s;
         }
 
         .sidebar a:hover {
             background: rgba(255,255,255,0.3);
         }
 
-        /* Main Content */
         .main-content {
             margin-left: 250px;
             padding: 30px;
-            flex-grow: 1;
+            width: 100%;
         }
 
         .topbar {
@@ -61,7 +56,6 @@
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
             margin-bottom: 25px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
@@ -71,16 +65,14 @@
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
         }
 
         .btn {
-            display: inline-block;
-            margin-top: 20px;
             background: #007bff;
             color: white;
             padding: 10px 18px;
             border-radius: 6px;
-            text-decoration: none;
             border: none;
             cursor: pointer;
         }
@@ -89,65 +81,52 @@
             background: #006ad1;
         }
 
-        p {
-            margin: 8px 0;
-        }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            .sidebar {
-                width: 200px;
-            }
-            .main-content {
-                margin-left: 200px;
-            }
-        }
+        .btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
 
-        @media (max-width: 650px) {
-            .sidebar {
-                position: relative;
-                width: 100%;
-                height: auto;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-        }
     </style>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
+
 <div class="container">
 
     <!-- Sidebar -->
     <div class="sidebar">
         <h2>Super Admin</h2>
-        <a href="#">Dashboard</a>
-        <a href="#">Manage Admins</a>
-        <a href="#">Manage Clients</a>
-        <a href="#">Manage Projects</a>
-        <a href="#">Reports</a>
-        <a href="#"><button id="themeToggle" class="px-3 py-2 rounded border"> 🌙 Dark Mode</button></a>
-        <form action="{{ route('logout') }}" method="POST" style="padding:2px;">
+         <div class="menu-item"><a href="{{ route('superadmin.dashboard') }}">Dashboard</a></div>
+        <div class="menu-item"><a href="{{ route('superadmin.admins.index') }}">Manage Admins</a></div>
+        <div class="menu-item"><a href="{{ route('superadmin.projects.index') }}">Projects</a></div>
+        <div class="menu-item"><a href="{{ route('superadmin.task.index') }}">Tasks</a></div>
+        <div class="menu-item"><a href="#">Settings</a></div>
+
+
+        <form action="{{ route('logout') }}" method="POST">
             @csrf
-            <button class="btn btn-delete">Logout</button>
+            <button class="btn" style="width:100%; margin-top:15px;">Logout</button>
         </form>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
+
         <div class="topbar">
+            <a href="{{ route('superadmin.projects.index') }}" class="btn">Back</a>
             <h2>Project Details</h2>
-            <span>Today: <strong>{{ date('M d, Y') }}</strong></span>
+            <span>{{ date('M d, Y') }}</span>
         </div>
 
+        <!-- PROJECT DETAILS -->
         <div class="card">
             <h3>{{ $project->title }}</h3>
 
-            <p><strong>Description:</strong><br>
-                {{ $project->description }}
-            </p>
+            <p><strong>Description:</strong><br>{{ $project->description }}</p>
 
             <p><strong>Client:</strong>
                 {{ $project->client_name ?? ($project->client->name ?? '-') }}
@@ -162,13 +141,82 @@
             <p><strong>End Date:</strong> {{ $project->end_date }}</p>
 
             <p><strong>Status:</strong>
-                <span style="color:blue; font-weight:bold;">{{ ucfirst($project->status) }}</span>
+                <span style="
+                    font-weight:bold;
+                    color: {{ $project->status === 'approved' ? 'green' :
+                             ($project->status === 'rejected' ? 'red' : 'blue') }};
+                ">
+                    {{ ucfirst($project->status) }}
+                </span>
             </p>
 
-            <a href="{{ route('superadmin.projects.index') }}" class="btn">Back</a>
+            
         </div>
-    </div>
+
+        <!-- TASKS -->
+        <div class="card">
+            <h3>Tasks Under This Project</h3>
+
+            <table width="100%" border="1" cellpadding="10">
+                <thead style="background:#006ad1;">
+                    <tr>
+                        <th>#</th>
+                        <th>Task Title</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                        <th>project manager</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @forelse($project->tasks as $task)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $task->title }}</td>
+                        <td>{{ $task->description }}</td>
+                        <td>{{ ucfirst($task->status) }}</td>
+                        <td>{{ $task->assignedTo->email ?? '-' }}</td>
+                        <td>{{ $task->supervisor->email ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" align="center">No tasks created</td>
+                    </tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
+
+  
+       <!-- APPROVE / REJECT -->
+<div class="card" style="text-align:center;">
+
+    <form action="{{ route('superadmin.projects.approve', $project->id) }}"
+          method="POST" style="display:inline-block;">
+        @csrf
+        <button
+            class="btn"
+            style="background:green;"
+            {{ $project->status !== 'submitted' ? 'disabled' : '' }}>
+            Approve Project
+        </button>
+    </form>
+
+    <form action="{{ route('superadmin.projects.reject', $project->id) }}"
+          method="POST" style="display:inline-block; margin-left:15px;">
+        @csrf
+        <button
+            class="btn"
+            style="background:red;"
+            {{ $project->status !== 'submitted' ? 'disabled' : '' }}>
+            Reject Project
+        </button>
+    </form>
 
 </div>
+
+    </div>
+</div>
+
 </body>
 </html>

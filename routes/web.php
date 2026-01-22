@@ -202,9 +202,13 @@ Route::post('/superadmin/projects/{project}/reject', [SuperAdminProjectControlle
 
 
 
+  Route::post('/projects/{project}/approve', 
+        [SuperAdminProjectController::class, 'approve'])
+        ->name('superadmin.projects.approve');
 
-
-
+    Route::post('/projects/{project}/reject', 
+        [SuperAdminProjectController::class, 'reject'])
+        ->name('superadmin.projects.reject');
 
 
 

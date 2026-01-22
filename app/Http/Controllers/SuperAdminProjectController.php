@@ -105,10 +105,41 @@ class SuperAdminProjectController extends Controller
     }
 
     // Show project details
-    public function show(Project $project)
-    {
-        return view('superadmin.projects.show', compact('project'));
-    }
+public function show(Project $project)
+{
+    $project->load('tasks', 'client', 'manager');
+
+    return view('superadmin.projects.show', compact('project'));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Edit project
     public function edit(Project $project)
@@ -216,6 +247,7 @@ public function reject(Project $project)
 
     return back()->with('error', 'Project rejected.');
 }
+
 
 
 
