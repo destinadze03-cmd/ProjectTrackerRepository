@@ -76,6 +76,19 @@ public function staffupdate()
     return view('admin.staff.task-detail', compact('task'));
 }
 
+
+
+/*public function taskupdaterejected()
+{
+    $tasks = Task::where('status', 'pending')               // Task completed by staff
+                 ->where('review_status', 'rejected')    // Review is still pending
+                 ->whereHas('project', fn($q) => $q->where('manager_id', auth()->id())) // Only tasks for admin's projects
+                 ->with('assignedStaff', 'project')     // Eager load relations
+                 ->latest()
+                 ->get();
+
+    return view('admin.Tasks.updaterejected', compact('tasks'));
+}*/
 }
 
 

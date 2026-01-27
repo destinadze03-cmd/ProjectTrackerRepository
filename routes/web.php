@@ -354,6 +354,7 @@ Route::put('/admin/tasks/{task}', [AdminTaskController::class, 'update'])->name(
 Route::get('/admin/staff.updates', [AdminStaffController::class, 'staffupdate'])
         ->name('admin.staff.update');
 
+
   // Review action (approve/reject)
     Route::post('/admin/tasks/{task}/review', [AdminStaffController::class, 'review'])
         ->name('admin.staff.review');
@@ -426,7 +427,9 @@ Route::middleware(['auth', 'isStaff'])->group(function () {
 
 Route::get('/staff/tasks', [StaffTaskController::class, 'index'])
     ->name('staff.tasks.index');
-
+Route::get('/staff', [StaffTaskController::class, 'indexs'])
+    ->name('staff.dashboard');
+Route::get('/staff/notifications/{id}/read', [StaffTaskController::class, 'markNotificationRead'])->name('staff.notifications.read');
 
         
 });

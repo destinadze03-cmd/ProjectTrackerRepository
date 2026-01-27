@@ -125,6 +125,12 @@
             <p>Total Tasks</p>
         </div>
     </a>
+<a href="{{ route('admin.Tasks.completed', [$project->id, 'status' => 'validated']) }}" class="stat-link">
+    <div class="stat-box">
+        <h3>{{ $submittedTasks }}</h3>
+        <p>submitted Tasks</p>
+    </div>
+</a>
 
    <a href="{{ route('admin.Tasks.completed', [$project->id, 'status' => 'validated']) }}" class="stat-link">
     <div class="stat-box">
@@ -133,6 +139,12 @@
     </div>
 </a>
 
+<a href="{{ route('admin.Tasks.completed', [$project->id, 'status' => 'validated']) }}" class="stat-link">
+    <div class="stat-box">
+        <h3>{{ $rejectedTasks }}</h3>
+        <p>Rejected Task</p>
+    </div>
+</a>
 
     <a href="{{ route('admin.Tasks.pending', [$project->id, 'status' => 'pending']) }}" class="stat-link">
         <div class="stat-box">

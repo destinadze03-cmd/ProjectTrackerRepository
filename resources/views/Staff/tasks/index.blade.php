@@ -24,6 +24,40 @@
         .status-pending { background: orange; }
         .status-approved { background: green; }
         .status-rejected { background: red; }
+
+
+
+
+
+
+
+
+
+
+        .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.notification-bell {
+    position: relative;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.notification-bell .badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
     </style>
 </head>
 <body>
@@ -41,11 +75,43 @@
     </div>
 
     <!-- Main Content -->
-    <div class="main-content">
+   <!-- Main Content -->
+<div class="main-content">
 
-        <h2>My Assigned Tasks</h2>
+    <!-- Top Bar -->
+<div class="top-bar">
+    <h2>My Assigned Tasks</h2>
+
+    <div class="notification-bell">
+        🔔
+        @if($unreadCount > 0)
+            <span class="badge">{{ $unreadCount }}</span>
+        @endif
+
+        <!-- Notification Dropdown -->
+        <div class="notification-dropdown" style="position:absolute; background:white; color:black; right:0; top:30px; width:300px; border:1px solid #ccc; border-radius:6px; display:none;">
+            <ul>
+                @forelse($notifications as $notification)
+                    <li style="padding:8px; border-bottom:1px solid #eee;">
+                        <a href="{{ route('staff.notifications.read', $notification->id) }}">
+                            <strong>{{ $notification->data['title'] }}</strong> - 
+                            {{ $notification->data['message'] }} 
+                            (Due: {{ $notification->data['due_date'] ?? 'N/A' }})
+                        </a>
+                    </li>
+                @empty
+                    <li style="padding:8px;">No notifications</li>
+                @endforelse
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
 
        @foreach ($tasks as $task)
+       
 <div class="task-card">
 
 <p><strong>Task Name:</strong> {{ $task->title }}</p>
@@ -96,5 +162,23 @@
 
     </div>
 
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bell = document.querySelector('.notification-bell');
+    if (bell) {
+        bell.addEventListener('click', function() {
+            const dropdown = this.querySelector('.notification-dropdown');
+            if (dropdown) {
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            }
+        });
+    }
+});
+</script>
+
 </body>
+
+
+
 </html>

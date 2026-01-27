@@ -9,19 +9,35 @@ use Illuminate\Http\Request;
 class StaffTaskController extends Controller
 {
     // Display all tasks assigned to the logged-in staff
-  public function index(Request $request)
+  public function index()
 {
-    $query = Task::where('assigned_to', auth()->id())
-                 ->orderBy('created_at', 'desc');
+    $user = auth()->user();
 
-    if ($request->filled('status')) {
-        $query->where('review_status', $request->status);
-    }
+    // Get tasks assigned to this user, most recent first
+    $tasks = Task::where('assigned_to', $user->id)
+                 ->orderBy('created_at', 'desc')
+                 ->get();
 
-    $tasks = $query->get();
+    // Count unread notifications
+    $unreadCount = $user->unreadNotifications()->count();
 
-    return view('staff.tasks.index', compact('tasks'));
+    // Get latest 10 notifications
+    $notifications = $user->notifications()->latest()->take(10)->get();
+
+    return view('Staff.tasks.index', compact('tasks', 'unreadCount', 'notifications'));
 }
+public function indexs()
+{
+    $user = auth()->user();
+
+    $tasks = Task::where('assigned_to', $user->id)->get();
+
+    $unreadCount = $user->unreadNotifications()->count();
+    $notifications = $user->notifications()->latest()->take(10)->get(); // last 10
+
+    return view('Staff.tasks.index', compact('tasks', 'unreadCount', 'notifications'));
+}
+
 
 
     // Submit task progress update
@@ -53,12 +69,27 @@ class StaffTaskController extends Controller
 
         return back()->with('success', 'Task progress submitted!');
     }
+
 public function dashboard()
 {
-    $tasks = Task::where('assigned_to', auth()->id())->get();
+    $staff = auth()->user();
 
-    return view('staff.dashboard', compact('tasks'));
+    // Tasks assigned to this staff
+    $tasks = Task::where('assigned_to', $staff->id)->get();
+
+    // Notifications (latest first)
+    $notifications = $staff->notifications()->latest()->get();
+
+    // Optional: unread count (for bell icon 🔔)
+    $unreadCount = $staff->unreadNotifications()->count();
+
+    return view('staff.dashboard', compact(
+        'tasks',
+        'notifications',
+        'unreadCount'
+    ));
 }
+
 
  // DASHBOARD WITH 3 CARDS
     public function dashboards()
@@ -94,4 +125,17 @@ public function dashboard()
 
         return view('staff.tasks.by-status', compact('tasks', 'status'));
     }
+
+
+    public function markNotificationRead($id)
+{
+    $notification = auth()->user()->notifications()->find($id);
+
+    if ($notification) {
+        $notification->markAsRead();
+    }
+
+    return redirect()->back();
+}
+
 }

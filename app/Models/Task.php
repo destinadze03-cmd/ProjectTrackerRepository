@@ -14,6 +14,7 @@ class Task extends Model
         'end_date', 'assigned_to', 'status', 'review_status',
         'review_note', 'reviewed_by','supervised_by','progress'
     ];
+    protected $dates =['start_date','end_date'];
 
     // A task belongs to a project
     public function project()

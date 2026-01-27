@@ -9,7 +9,7 @@ use App\Models\User;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Notifications\TaskAssigned;
 
 class AdminTaskController extends Controller
 {
@@ -162,7 +162,6 @@ class AdminTaskController extends Controller
 
     return back()->with('success', 'Task created successfully.');
 }
-
 public function store(Request $request)
 {
     // Validate input
@@ -180,12 +179,14 @@ public function store(Request $request)
     // Save task
     $task = Task::create($data);
 
-   return redirect()
-    ->route('admin.projects.project-tasks', $data['project_id'])
-    ->with('success', 'Task created successfully!');
+    // 🔔 NOTIFY assigned staff
+    $assignedUser = User::find($data['assigned_to']);
+    $assignedUser->notify(new TaskAssigned($task));
 
+    return redirect()
+        ->route('admin.projects.project-tasks', $data['project_id'])
+        ->with('success', 'Task created successfully and staff notified!');
 }
-
 
 public function index(Request $request, Project $project)
 {

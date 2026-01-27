@@ -151,9 +151,9 @@
                                 @foreach($staff->assignedTasks as $index => $task)
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $task->project->name ?? 'N/A' }}</td>
+                                        <td>{{ $task->project->title ?? 'N/A' }}</td>
                                         <td>{{ $task->title }}</td>
-                                        <td>{{ $task->assignedBy->name ?? 'N/A' }}</td>
+                                        <td>{{ $task->supervisor->email ?? 'N/A' }}</td>
                                         <td>{{ ucfirst($task->status) }}</td>
                                         <td>{{ ucfirst($task->review_status ?? 'N/A') }}</td>
                                         <td>{{ $task->start_date ?? 'N/A' }}</td>

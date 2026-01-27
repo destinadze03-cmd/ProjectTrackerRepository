@@ -25,14 +25,18 @@ class AdminProjectController extends Controller
     abort_if($project->manager_id !== auth()->id(), 403);
 
     $totalTasks = $project->tasks()->count();
-    $completedTasks = $project->tasks()->where('status', 'done')->count();
+    $completedTasks = $project->tasks()->where('review_status', 'validated')->count();
     $pendingTasks = $project->tasks()->where('status', 'pending')->count();
 
+    $submittedTasks = $project->tasks()->where('status', 'done')->count();
+ $rejectedTasks = $project->tasks()->where('review_status', 'rejected')->count();
     return view('admin.projects.show-project-details', compact(
         'project',
         'totalTasks',
         'completedTasks',
-        'pendingTasks'
+        'pendingTasks',
+        'submittedTasks',
+        'rejectedTasks'
     ));
 }
 

@@ -100,7 +100,7 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $s->name }}</td>
                             <td>{{ $s->email }}</td>
-                            <td>{{ $s->assignedBy->name ?? 'N/A' }}</td>
+                            <td>{{ $s->supervisor->name ?? 'N/A' }}</td>
 
                             <td>{{ $s->assignedTasks->count() }}</td>
                             <td>

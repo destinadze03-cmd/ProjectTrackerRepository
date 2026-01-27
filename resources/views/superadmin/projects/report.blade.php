@@ -195,7 +195,7 @@
                         @foreach($project->tasks as $task)
                         <tr>
                             <td>{{ $task->title }}</td>
-                            <td>{{ $task->assignedTo->name ?? '-' }}</td>
+                            <td>{{ $task->assignedTo->email ?? '-' }}</td>
                             <td>{{ ucfirst($task->status) }}</td>
                             <td>{{ $task->updated_at->format('M d, Y') }}</td>
                         </tr>
