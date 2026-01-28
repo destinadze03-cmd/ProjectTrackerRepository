@@ -6,6 +6,18 @@ use App\Models\Task;
 use App\Models\TaskUpdate;
 use Illuminate\Http\Request;
 
+
+
+
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\TasksImport;
+
+
+use App\Notifications\TaskSubmitted;
+
+
+
+
 class StaffTaskController extends Controller
 {
     // Display all tasks assigned to the logged-in staff
@@ -14,9 +26,12 @@ class StaffTaskController extends Controller
     $user = auth()->user();
 
     // Get tasks assigned to this user, most recent first
-    $tasks = Task::where('assigned_to', $user->id)
-                 ->orderBy('created_at', 'desc')
-                 ->get();
+ $tasks = Task::where('assigned_to', $user->id)
+             ->orderBy('created_at', 'desc')          // newest first
+             ->orderByRaw("FIELD(status, 'pending', 'done')")  // pending before done if created_at is same
+             ->get();
+
+
 
     // Count unread notifications
     $unreadCount = $user->unreadNotifications()->count();
@@ -137,5 +152,47 @@ public function dashboard()
 
     return redirect()->back();
 }
+
+
+public function import(Request $request)
+{
+
+
+    $request->validate([
+        'excel_file' => 'required|mimes:xlsx,xls,csv'
+    ]);
+
+    Excel::import(new TasksImport, $request->file('excel_file'));
+
+    return back()->with('success', 'Imported');
+}
+
+
+
+
+public function submitTask(Request $request, $id)
+{
+    $task = Task::findOrFail($id);
+
+    // Save submission
+    $task->status = 'done';
+    $task->staff_comment = $request->staff_comment ?? null;
+    $task->save();
+
+    // Find supervisor/admin
+    $supervisor = $task->supervisor;
+
+    // DEBUG: check if supervisor exists
+    if (!$supervisor) {
+        dd('Supervisor not found', $task->supervised_by);
+    }
+
+    // Send email notification
+    $supervisor->notify(new TaskSubmitted($task));
+
+    return back()->with('success', 'Task submitted and supervisor notified!');
+}
+
+
 
 }

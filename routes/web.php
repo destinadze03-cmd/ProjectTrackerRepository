@@ -386,6 +386,8 @@ Route::post('/admin/projects/{project}/submit', [AdminProjectController::class, 
 
 
 
+Route::post('/admin/tasks/import', [StaffTaskController::class, 'import'])
+    ->name('admin.tasks.import');
 
 
 
@@ -415,6 +417,8 @@ Route::middleware(['auth', 'isStaff'])->group(function () {
     Route::post('/staff/tasks/{task}/update', [StaffTaskController::class, 'updateTask'])
         ->name('staff.tasks.update');
 
+Route::post('/staff/tasks/{id}/submit', [StaffTaskController::class, 'submitTask'])
+    ->name('staff.tasks.submit');
 
 
 

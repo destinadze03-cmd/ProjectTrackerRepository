@@ -81,6 +81,11 @@
     <!-- Top Bar -->
 <div class="top-bar">
     <h2>My Assigned Tasks</h2>
+      <form action="{{ route('admin.tasks.import') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="excel_file" required>
+    <button type="submit">Import Tasks</button>
+</form>
 
     <div class="notification-bell">
         🔔

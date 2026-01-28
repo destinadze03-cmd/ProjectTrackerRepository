@@ -162,6 +162,16 @@ class AdminTaskController extends Controller
 
     return back()->with('success', 'Task created successfully.');
 }
+
+
+
+
+
+
+
+
+
+
 public function store(Request $request)
 {
     // Validate input
@@ -170,23 +180,40 @@ public function store(Request $request)
         'title' => 'required|string|max:255',
         'description' => 'nullable|string',
         'assigned_to' => 'required|exists:users,id',
-        'supervised_by' => 'nullable|exists:users,id',
         'start_date' => 'nullable|date',
         'end_date' => 'nullable|date',
         'duration' => 'nullable|integer',
     ]);
+
+    // Set supervised_by automatically to the current admin
+    $data['supervised_by'] = auth()->id();
 
     // Save task
     $task = Task::create($data);
 
     // 🔔 NOTIFY assigned staff
     $assignedUser = User::find($data['assigned_to']);
-    $assignedUser->notify(new TaskAssigned($task));
+    if ($assignedUser) {
+        $assignedUser->notify(new TaskAssigned($task));
+    }
 
     return redirect()
         ->route('admin.projects.project-tasks', $data['project_id'])
         ->with('success', 'Task created successfully and staff notified!');
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 public function index(Request $request, Project $project)
 {
