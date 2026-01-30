@@ -81,11 +81,43 @@
     <!-- Top Bar -->
 <div class="top-bar">
     <h2>My Assigned Tasks</h2>
-      <form action="{{ route('admin.tasks.import') }}" method="POST" enctype="multipart/form-data">
+      <form action="{{ route('admin.tasks.import') }}" method="POST" enctype="multipart/form-data"
+      style="display:flex; align-items:center; gap:10px;">
     @csrf
+
+    <!-- File Input -->
     <input type="file" name="excel_file" required>
+
+    <!-- Import Button -->
     <button type="submit">Import Tasks</button>
+
+    <!-- Excel Structure Image -->
+    <a href="{{ asset('images/download1.png') }}" target="_blank">
+        <img src="{{ asset('images/download1.png') }}"
+             alt="Excel Format Guide"
+             width="45"
+             height="45"
+             title="Click to view Excel sheet format"
+             style="border:1px solid #ccc; border-radius:6px; cursor:pointer;">
+    </a>
 </form>
+
+<!-- Download Template Button -->
+<a href="{{ asset('templates/tasks_template.xlsx') }}"
+   download
+   id="downloadBtn"
+   style="background:green; color:white; padding:10px 14px;
+          border-radius:6px; text-decoration:none;">
+   Download Template
+</a>
+
+<!-- Countdown Message -->
+<span id="downloadMessage"
+      style="margin-left:10px; font-weight:bold; color:blue; display:none;">
+</span>
+
+
+
 
     <div class="notification-bell">
         🔔

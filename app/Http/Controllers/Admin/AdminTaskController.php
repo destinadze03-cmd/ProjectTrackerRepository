@@ -185,13 +185,13 @@ public function store(Request $request)
         'duration' => 'nullable|integer',
     ]);
 
-    // Set supervised_by automatically to the current admin
+    // Set supervisor automatically to the logged-in admin
     $data['supervised_by'] = auth()->id();
 
     // Save task
     $task = Task::create($data);
 
-    // 🔔 NOTIFY assigned staff
+    // Notify assigned staff
     $assignedUser = User::find($data['assigned_to']);
     if ($assignedUser) {
         $assignedUser->notify(new TaskAssigned($task));
@@ -199,7 +199,7 @@ public function store(Request $request)
 
     return redirect()
         ->route('admin.projects.project-tasks', $data['project_id'])
-        ->with('success', 'Task created successfully and staff notified!');
+        ->with('success', 'Task created and staff notified!');
 }
 
 

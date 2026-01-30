@@ -186,6 +186,7 @@ body {
 
     <!-- Top Bar -->
     <div class="top-bar">
+        <strong><h1>Welcome,Staff-> {{ auth()->user()->name }}</h1></strong>
         <h2>My Assigned Tasks</h2>
 
         <div class="notification-bell">

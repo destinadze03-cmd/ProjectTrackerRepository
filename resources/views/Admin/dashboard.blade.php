@@ -52,7 +52,7 @@
     <!-- Top Bar -->
     <div class="topbar">
         <h2>Admin Dashboard</h2>
-        <p>Welcome, {{ auth()->user()->name }}</p>
+        <strong><p>Welcome, {{ auth()->user()->name }}</p></strong>
     </div>
 
     <!-- Square Cards -->

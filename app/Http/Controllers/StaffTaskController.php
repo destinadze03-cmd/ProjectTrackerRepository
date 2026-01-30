@@ -174,7 +174,7 @@ public function submitTask(Request $request, $id)
 {
     $task = Task::findOrFail($id);
 
-    // Save submission
+    // Save staff submission
     $task->status = 'done';
     $task->staff_comment = $request->staff_comment ?? null;
     $task->save();
@@ -182,16 +182,14 @@ public function submitTask(Request $request, $id)
     // Find supervisor/admin
     $supervisor = $task->supervisor;
 
-    // DEBUG: check if supervisor exists
-    if (!$supervisor) {
-        dd('Supervisor not found', $task->supervised_by);
+    // Send email notification to supervisor
+    if ($supervisor) {
+        $supervisor->notify(new TaskSubmitted($task));
     }
-
-    // Send email notification
-    $supervisor->notify(new TaskSubmitted($task));
 
     return back()->with('success', 'Task submitted and supervisor notified!');
 }
+
 
 
 

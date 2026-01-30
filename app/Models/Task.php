@@ -10,9 +10,19 @@ class Task extends Model
     use HasFactory;
 
      protected $fillable = [
-        'project_id', 'title', 'description', 'duration', 'start_date',
-        'end_date', 'assigned_to', 'status', 'review_status',
-        'review_note', 'reviewed_by','supervised_by','progress'
+          'project_id',
+        'title',
+        'description',
+        'assigned_to',
+        'supervised_by',
+        'start_date',
+        'end_date',
+        'duration',
+        'status',
+        'staff_comment',
+        'review_status',
+        'review_note',
+        'reviewed_by'
     ];
     protected $dates =['start_date','end_date'];
 

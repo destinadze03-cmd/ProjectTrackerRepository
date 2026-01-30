@@ -173,7 +173,7 @@
     <div class="main-conten">
 
         <div class="topbar">
-            <h2>Welcome, Super Admin</h2>
+            <strong><h1>Welcome, {{ auth()->user()->name }}</h1></strong>
             <span>Today: <strong>{{ date('M d, Y') }}</strong></span>
         </div>
 
