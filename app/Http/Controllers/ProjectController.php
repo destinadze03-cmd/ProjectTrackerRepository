@@ -6,7 +6,8 @@ use App\Models\Project;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Models\Task;
-
+use App\Models\User;
+use App\Notifications\ProjectAssigned;
 class ProjectController extends Controller
 {
     // Show all projects
@@ -94,23 +95,65 @@ public function store(Request $request)
     return view('admin/projects.edit', compact('project'));
 }
 
+
+
+
+
+
+
+
     // Update project
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'client_id'   => 'required|exists:clients,id',
-            'title'       => 'required',
-            'description' => 'nullable',
-            'start_date'  => 'required|date',
-            'end_date'    => 'nullable|date|after_or_equal:start_date',
-            'status'      => 'required'
-        ]);
+public function update(Request $request, $id)
+{
+    // ✅ Step 1: Validate
+    $request->validate([
+        'client_id'   => 'required|exists:clients,id',
+        'title'       => 'required',
+        'description' => 'nullable',
+        'start_date'  => 'required|date',
+        'end_date'    => 'nullable|date|after_or_equal:start_date',
+        'status'      => 'required'
+    ]);
 
-        $project = Project::findOrFail($id);
-        $project->update($request->all());
+    // ✅ Step 2: Find the project
+    $project = Project::findOrFail($id);
 
-        return redirect()->route('projects.index')->with('success', 'Project updated successfully');
+    // ✅ Step 3: Update the project
+    $project->update($request->all());
+
+    // ✅ Step 4: Find the assigned admin (manager)
+    $admin = User::find($project->manager_id);
+
+    // ✅ Step 5: Notify the admin
+    if ($admin) {
+        $admin->notify(new ProjectUpdatedNotification($project));
     }
+
+    // ✅ Step 6: Redirect back
+    return redirect()
+        ->route('projects.index')
+        ->with('success', 'Project updated successfully and Admin notified.');
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Delete project
     public function destroy($id)

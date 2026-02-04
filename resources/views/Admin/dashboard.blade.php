@@ -53,6 +53,53 @@
     <div class="topbar">
         <h2>Admin Dashboard</h2>
         <strong><p>Welcome, {{ auth()->user()->name }}</p></strong>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+
+   
+
+    <a href="#" class="btn btn-outline-dark position-relative">
+        🔔 
+
+        <span class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+            {{ auth()->user()->unreadNotifications->count() }}
+        </span>
+    </a> <p>Notification</p>
+
+</div>
+
+
+@if($notifications->count() > 0)
+
+    @foreach($notifications as $notification)
+
+        <div class="alert alert-info">
+            <strong>{{ $notification->data['title'] }}</strong><br>
+
+            {{ $notification->data['message'] }}
+
+            <a href="{{ url('/admin/projects/' . $notification->data['project_id']) }}"
+               class="btn btn-sm btn-primary mt-2">
+                View Project
+            </a>
+
+            <!-- Mark as Read -->
+            <form action="{{ route('notifications.read', $notification->id) }}"
+                  method="POST"
+                  style="display:inline;">
+                @csrf
+                <button class="btn btn-sm btn-success mt-2">
+                    Mark as Read
+                </button>
+            </form>
+        </div>
+
+    @endforeach
+
+@else
+    
+@endif
+
     </div>
 
     <!-- Square Cards -->

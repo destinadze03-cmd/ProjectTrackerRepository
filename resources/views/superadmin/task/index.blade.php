@@ -188,6 +188,27 @@
             .topbar-text p { font-size: 12px; }
             table { min-width: 400px; font-size: 12px; }
         }
+
+
+
+
+        .search-box {
+    margin-bottom: 15px;
+}
+
+.search-box input {
+    width: 320px;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -221,9 +242,13 @@
         <!-- TASK TABLE -->
         <div class="card">
             <div class="card-header">
+
                 <h3>Tasks List</h3>
             </div>
             <div class="card-body">
+                <div class="search-box">
+        <input type="text" id="taskSearch" placeholder="Search task by title...">
+    </div>
                 <table>
                     <thead>
                         <tr>
@@ -271,6 +296,37 @@
     </main>
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    document.getElementById("taskSearch").addEventListener("keyup", function () {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll("tbody tr");
+
+        rows.forEach(row => {
+            let taskTitle = row.cells[1].textContent.toLowerCase(); // Task Title column
+
+            if (taskTitle.includes(filter)) {
+                row.style.display = "";
+            } else {
+                row.style.display = "none";
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

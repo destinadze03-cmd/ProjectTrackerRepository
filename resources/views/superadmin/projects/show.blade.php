@@ -88,6 +88,22 @@
     opacity: 0.7;
 }
 
+
+
+
+.btn-delete {
+    background: red !important;
+    color: white !important;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background: darkred !important;
+}
+
     </style>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -118,13 +134,22 @@
 
         <div class="topbar">
             <a href="{{ route('superadmin.projects.index') }}" class="btn">Back</a>
-            <h2>Project Details</h2>
+            <strong><h2>Project Details</h2></strong>
+            <form action="{{ route('superadmin.projects.delete', $project->id) }}"
+      method="POST"
+      onsubmit="return confirm('Are you sure you want to delete this project?');">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn-delete">Delete</button>
+</form>
+
+                        
             <span>{{ date('M d, Y') }}</span>
         </div>
 
         <!-- PROJECT DETAILS -->
         <div class="card">
-            <h3>{{ $project->title }}</h3>
+            <p><strong>Project Name:</strong><br> <h3>{{ $project->title }}</h3>
 
             <p><strong>Description:</strong><br>{{ $project->description }}</p>
 
@@ -202,16 +227,20 @@
         </button>
     </form>
 
-    <form action="{{ route('superadmin.projects.reject', $project->id) }}"
-          method="POST" style="display:inline-block; margin-left:15px;">
-        @csrf
-        <button
-            class="btn"
-            style="background:red;"
-            {{ $project->status !== 'submitted' ? 'disabled' : '' }}>
-            Reject Project
-        </button>
-    </form>
+    <form action="{{ route('superadmin.projects.reject', $project->id) }}" method="POST" style="display:inline-block; margin-left:15px;">
+    @csrf
+
+    <!-- Rejection note -->
+    <textarea name="review_note" placeholder="Enter rejection reason" required
+              style="width:300px; height:60px; margin-bottom:10px;"></textarea>
+
+    <!-- Reject button -->
+    <button class="btn" style="background:red;"
+        {{ $project->status !== 'submitted' ? 'disabled' : '' }}>
+        Reject Project
+    </button>
+</form>
+
 
 </div>
 

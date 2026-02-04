@@ -56,34 +56,49 @@ public function indexs()
 
 
     // Submit task progress update
-    public function UpdateTask(Request $request, Task $task)
-    {
-        $request->validate([
-            'note' => 'nullable|string',
-            'status' => 'required|in:pending,done',
-            'screenshot' => 'nullable|image|max:4096'
-        ]);
+   public function UpdateTask(Request $request, Task $task)
+{
+    $request->validate([
+        'note' => 'nullable|string',
+        'status' => 'required|in:pending,done',
+        'screenshot' => 'nullable|image|max:4096'
+    ]);
 
-        $fileName = null;
+    $fileName = null;
 
-        if ($request->hasFile('screenshot')) {
-            $fileName = time().'_'.$request->screenshot->getClientOriginalName();
-            $request->screenshot->move(public_path('task_screenshots'), $fileName);
-        }
-
-        TaskUpdate::create([
-            'task_id' => $task->id,
-            'user_id' => auth()->id(),
-            'note' => $request->note,
-            'screenshot' => $fileName,
-            'status' => $request->status,
-        ]);
-
-        // update main task status
-        $task->update(['status' => $request->status]);
-
-        return back()->with('success', 'Task progress submitted!');
+    // Upload screenshot if provided
+    if ($request->hasFile('screenshot')) {
+        $fileName = time() . '_' . $request->screenshot->getClientOriginalName();
+        $request->screenshot->move(public_path('task_screenshots'), $fileName);
     }
+
+    // Save task update
+    TaskUpdate::create([
+        'task_id' => $task->id,
+        'user_id' => auth()->id(),
+        'note' => $request->note,
+        'screenshot' => $fileName,
+        'status' => $request->status,
+    ]);
+
+    // Update main task status
+    $task->update([
+        'status' => $request->status
+    ]);
+
+    // ✅ Send email ONLY when task is marked as done
+    if ($request->status === 'done') {
+
+        // Find the admin/supervisor who assigned the task
+        $supervisor = $task->supervisor;
+
+        if ($supervisor) {
+            $supervisor->notify(new TaskSubmitted($task));
+        }
+    }
+
+    return back()->with('success', 'Task progress submitted successfully!');
+}
 
 public function dashboard()
 {
@@ -172,6 +187,8 @@ public function import(Request $request)
 
 public function submitTask(Request $request, $id)
 {
+
+    // dd(12345);
     $task = Task::findOrFail($id);
 
     // Save staff submission
@@ -186,6 +203,8 @@ public function submitTask(Request $request, $id)
     if ($supervisor) {
         $supervisor->notify(new TaskSubmitted($task));
     }
+
+    // dd([$task, $supervisor]);
 
     return back()->with('success', 'Task submitted and supervisor notified!');
 }

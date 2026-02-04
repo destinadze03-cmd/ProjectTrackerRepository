@@ -6,21 +6,34 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
-
 use Illuminate\Support\Facades\Auth;
 
 class AdminDashboardController extends Controller
 {
     public function index()
     {
-        $projects = Project::where('manager_id', Auth::id())->get();
+        $admin = Auth::user();
 
-    $tasks = Task::whereHas('project', function ($q) {
-        $q->where('manager_id', Auth::id());
-    })->get();
+        // ✅ Projects assigned to this admin
+        $projects = Project::where('manager_id', $admin->id)->get();
 
-    
-$staff = User::where('role', 'staff')->get();
-return view('Admin.dashboard', compact('projects', 'tasks', 'staff'));
+        // ✅ Tasks under admin projects
+        $tasks = Task::whereHas('project', function ($q) use ($admin) {
+            $q->where('manager_id', $admin->id);
+        })->get();
+
+        // ✅ Staff list
+        $staff = User::where('role', 'staff')->get();
+
+        // ✅ Notifications (Unread)
+        $notifications = $admin->unreadNotifications;
+
+        return view('Admin.dashboard', compact(
+            'projects',
+            'tasks',
+            'staff',
+            'notifications'
+        ));
     }
 }
+

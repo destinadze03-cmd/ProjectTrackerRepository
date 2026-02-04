@@ -72,20 +72,12 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .topbar h2 {
-            margin: 0;
-        }
-
         .card {
             background: #fff;
             padding: 25px;
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-        }
-
-        .card h3 {
-            margin-top: 0;
         }
 
         input, select, textarea {
@@ -109,34 +101,49 @@
             background: #283593;
         }
 
+        /* TABLE FIX */
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+        }
+
         table {
             width: 100%;
+            min-width: 900px;
             border-collapse: collapse;
         }
 
         table th, table td {
             border: 1px solid #ccc;
             padding: 8px;
+            text-align: left;
         }
 
         table thead {
             background: #f2f2f2;
         }
 
+        /* Prevent long description breaking layout */
+        table td:nth-child(2) {
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         .btn-action {
             display: inline-block;
-            margin-right: 5px;
-            margin-bottom: 5px;
+            margin: 3px;
             padding: 5px 10px;
             border-radius: 4px;
             color: white;
             text-decoration: none;
+            font-size: 13px;
         }
 
         .btn-view { background: #4CAF50; }
         .btn-edit { background: #2196F3; }
         .btn-report { background: #FF9800; }
-        .btn-delete { background: red; border: none; cursor: pointer; }
 
         /* Responsive */
         @media(max-width: 900px) {
@@ -158,8 +165,10 @@
             }
         }
     </style>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
+
 <body>
 
     <!-- SIDEBAR -->
@@ -168,20 +177,15 @@
         <ul>
             <li><a href="{{ route('superadmin.dashboard') }}">Dashboard</a></li>
             <li><a href="{{ route('superadmin.admins.index') }}">Manage Admins</a></li>
-          
             <li><a href="{{ route('superadmin.projects.index') }}">Projects</a></li>
             <li><a href="#">Tasks</a></li>
-            <li><button
-    id="themeToggle"
-    class="px-3 py-2 rounded border"
->
-    🌙 Dark Mode
-</button></li>
 
-            <li><form action="{{ route('logout') }}" method="POST" style="padding:2px;">
-            @csrf
-            <button class="btn btn-delete">Logout</button>
-        </form></li>
+            <li>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button class="btn">Logout</button>
+                </form>
+            </li>
         </ul>
     </div>
 
@@ -208,8 +212,10 @@
         <!-- CREATE PROJECT FORM -->
         <div class="card">
             <h3>Create New Project</h3>
+
             <form action="{{ route('superadmin.projects.store') }}" method="POST">
                 @csrf
+
                 <label>Project Title:</label>
                 <input type="text" name="title" required>
 
@@ -229,9 +235,8 @@
                 <input type="number" name="duration">
 
                 <label>Assign Admin:</label>
-                <select name="manager_id">
+                <select name="manager_id" required>
                     <option value="">Select Admin</option>
-                    
                     @foreach($admins as $admin)
                         <option value="{{ $admin->id }}">{{ $admin->name }}</option>
                     @endforeach
@@ -240,8 +245,8 @@
                 <label>Status:</label>
                 <select name="status">
                     <option value="pending">Pending</option>
-                    <option value="active">Active</option>
-                    <option value="completed">Completed</option>
+                    
+                    
                 </select>
 
                 <button type="submit" class="btn">Create Project</button>
@@ -251,47 +256,58 @@
         <!-- PROJECT LIST -->
         <div class="card">
             <h3>All Projects</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Client</th>
-                        <th>Admin</th>
-                        <th>Duration</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                        <th>Actions</th>
-                        <th>Actions</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($projects as $p)
-                    <tr>
-                        <td>{{ $p->title }}</td>
-                        <td>{{ $p->description }}</td>
-                        <td>{{ $p->client_name ?? ($p->client->name ?? '-') }}</td>
-                        <td>{{ $p->manager->name ?? '-' }}</td>
-                        <td>{{ $p->duration ?? '-' }} days</td>
-                        <td>{{ $p->start_date ?? '-' }}</td>
-                        <td>{{ $p->end_date ?? '-' }}</td>
-                        <td>{{ ucfirst($p->status) }}</td>
-                        <td><a class="btn-action btn-view" href="{{ route('superadmin.projects.show', $p->id) }}">View</a></td>
-                           <td> <a class="btn-action btn-edit" href="{{ route('superadmin.projects.edit', $p->id) }}">Edit</a></td>
-                           <td> <a class="btn-action btn-report" href="{{ route('superadmin.projects.report', $p->id) }}">Report</a></td>
-                           <td> <form action="{{ route('superadmin.projects.delete', $p->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn-action btn-delete">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Client</th>
+                            <th>Admin</th>
+                            <th>Duration</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                             <th>Actions</th>
+                              <th>Actions</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach($projects as $p)
+                        <tr>
+                            <td>{{ $p->title }}</td>
+                            <td>{{ $p->description }}</td>
+                            <td>{{ $p->client_name ?? '-' }}</td>
+                            <td>{{ $p->manager->name ?? '-' }}</td>
+                            <td>{{ $p->duration ?? '-' }} days</td>
+                            <td>{{ $p->start_date ?? '-' }}</td>
+                            <td>{{ $p->end_date ?? '-' }}</td>
+                            <td>{{ ucfirst($p->status) }}</td>
+
+                            <td>
+                                <a class="btn-action btn-view"
+                                   href="{{ route('superadmin.projects.show', $p->id) }}">
+                                   View
+                                </a></td>
+<td>
+                                <a class="btn-action btn-edit"
+                                   href="{{ route('superadmin.projects.edit', $p->id) }}">
+                                   Edit
+                                </a></td>
+                                <td><a class="btn-action btn-report"
+                                   href="{{ route('superadmin.projects.report', $p->id) }}">
+                                   Report
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
     </div>

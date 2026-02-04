@@ -82,7 +82,8 @@
     <!-- Header -->
     <div class="project-header">
         <div>
-            <h2>{{ $project->title }}</h2>
+         
+            <p>Project Name: <strong>{{ $project->title }}</strong></p>
             <p>Status: <strong>{{ ucfirst($project->status ?? 'N/A') }}</strong></p>
         </div>
 
@@ -98,6 +99,7 @@
     <div class="info-row">
         <strong>Description:</strong>
         <p>{{ $project->description ?? 'No description provided.' }}</p>
+        
     </div>
 
     <div class="info-row">

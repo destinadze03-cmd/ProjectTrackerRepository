@@ -137,6 +137,14 @@ public function assignedBy() {
     return $this->belongsTo(User::class, 'assigned_by'); // 'assigned_by' is the admin's user_id
 }
 
+public function supervisor()
+{
+    return $this->belongsTo(User::class, 'supervised_by');
+}
 
+public function assignedTo()
+{
+    return $this->hasMany(Task::class, 'assigned_to'); // tasks assigned to this staff
+}
 
 }

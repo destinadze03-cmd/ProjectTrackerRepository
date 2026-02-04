@@ -100,7 +100,22 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $s->name }}</td>
                             <td>{{ $s->email }}</td>
-                            <td>{{ $s->supervisor->name ?? 'N/A' }}</td>
+                            <td>
+@php
+    // Get all unique supervisors for this staff
+    $supervisors = $s->assignedTo          // get all tasks assigned to this staff
+                     ->pluck('supervisor')   // get the supervisor for each task
+                     ->filter()              // remove nulls
+                     ->unique('id');         // remove duplicates
+@endphp
+
+@if($supervisors->isEmpty())
+    N/A
+@else
+    {{ $supervisors->pluck('name')->join(', ') }}
+@endif
+</td>
+
 
                             <td>{{ $s->assignedTasks->count() }}</td>
                             <td>

@@ -393,6 +393,41 @@ Route::post('/admin/tasks/import', [StaffTaskController::class, 'import'])
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Route::post('/notifications/read/{id}', function ($id) {
+
+    $notification = auth()->user()
+        ->notifications()
+        ->find($id);
+
+    if ($notification) {
+        $notification->markAsRead();
+    }
+
+    return back();
+
+})->name('admin.notifications.read');
+
+
 /*
 |--------------------------------------------------------------------------
 | Staff Routes
@@ -406,8 +441,8 @@ Route::middleware(['auth', 'isStaff'])->group(function () {
         ->name('staff.dashboard');
 
     // All assigned tasks
-    Route::get('/staff/tasks', [StaffTaskController::class, 'index'])
-        ->name('staff.tasks.index');
+    //Route::get('/staff/tasks', [StaffTaskController::class, 'index'])
+        //->name('staff.tasks.index');
 
     // View single task
     Route::get('/staff/tasks/{task}', [StaffTaskController::class, 'viewTask'])
@@ -417,8 +452,8 @@ Route::middleware(['auth', 'isStaff'])->group(function () {
     Route::post('/staff/tasks/{task}/update', [StaffTaskController::class, 'updateTask'])
         ->name('staff.tasks.update');
 
-Route::post('/staff/tasks/{id}/submit', [StaffTaskController::class, 'submitTask'])
-    ->name('staff.tasks.submit');
+    Route::post('/staff/tasks/{id}/submit', [StaffTaskController::class, 'submitTask'])
+        ->name('staff.tasks.submit');
 
 
 

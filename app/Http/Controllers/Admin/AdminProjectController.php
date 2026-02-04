@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Project;
+use App\Models\User;
+use App\Notifications\ProjectSubmittedNotification;
+
 
 class AdminProjectController extends Controller
 {
@@ -54,6 +57,8 @@ public function totalTasks(Project $project)
 
 
 
+//admin submit projects 
+
 public function submit(Project $project)
 {
     // Ensure only assigned admin can submit
@@ -66,12 +71,22 @@ public function submit(Project $project)
         return back()->with('error', 'This project cannot be submitted.');
     }
 
+    // ✅ Update project status
     $project->update([
         'status' => 'submitted'
     ]);
 
-    return back()->with('success', 'Project submitted to SuperAdmin for review.');
+    // ✅ Notify SuperAdmin (creator of the project)
+    if ($project->created_by) {
+        $superadmin = User::find($project->created_by);
+        if ($superadmin) {
+            $superadmin->notify(new ProjectSubmittedNotification($project));
+        }
+    }
+
+    return back()->with('success', 'Project submitted to SuperAdmin for review and notification sent.');
 }
+
 
 
 }
